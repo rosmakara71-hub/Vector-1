@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>វិញ្ញាសាប្រឡង៖ វ៉ិចទ័រទីតាំង និងការចែកអង្កត់</title>
+    <style>
+        body {
+            font-family: 'KHMER OS Battambang', 'Khmer OS', sans-serif;
+            line-height: 1.8;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+            margin: 0;
+            padding: 20px;
+        }
+        .quiz-container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #1a5276;
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        .author {
+            text-align: center;
+            color: #34495e;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+        /* ប្រអប់ព័ត៌មានសិស្ស */
+        .student-info-box {
+            background: #f8fafc;
+            border: 2px solid #3498db;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #1a5276;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .question-box {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 22px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .question-text {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 12px;
+        }
+        .option-item label {
+            display: block;
+            padding: 12px 18px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-item label:hover {
+            background: #edf2f7;
+            border-color: #a0aec0;
+        }
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.1);
+            vertical-align: middle;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background: #2980b9;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            box-shadow: 0 4px 6px rgba(41, 128, 185, 0.2);
+        }
+        .btn-submit:hover {
+            background: #21618c;
+        }
+        .score-summary {
+            display: none;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #ebf5fb;
+            color: #2e4053;
+            border: 2px solid #2980b9;
+        }
+        .result-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.95rem;
+        }
+        .correct-answer {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .incorrect-answer {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .explanation {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            color: #566573;
+            font-style: italic;
+        }
+        .vector {
+            position: relative;
+            display: inline-block;
+        }
+        .vector::after {
+            content: "→";
+            position: absolute;
+            top: -12px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>📝 វិញ្ញាសាប្រឡងតេស្តសមត្ថភាព</h1>
+    <div class="subtitle">មេរៀន៖ វ៉ិចទ័រទីតាំង និងការចែកអង្កត់ (ពិន្ទុពេញ ៥០)</div>
+    <div class="author">រៀបរៀងដោយ៖ លោកគ្រូ <b>រស់ មករា</b></div>
+    
+    <div class="student-info-box">
+        <div class="input-group">
+            <label for="studentName">ឈ្មោះសិស្ស៖</label>
+            <input type="text" id="studentName" placeholder="ឧ. សុខ ម៉ានី">
+        </div>
+        <div class="input-group">
+            <label for="studentClass">ថ្នាក់រៀន៖</label>
+            <input type="text" id="studentClass" placeholder="ឧ. ថ្នាក់ទី ១២អា">
+        </div>
+    </div>
+
+    <div id="scoreDisplay" class="score-summary"></div>
+
+    <form id="quizForm">
+        <!-- សំណួរទី ១ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ១៖ គេមានវ៉ិចទ័រទីតាំង <span class="vector">a</span> = (3, -1) និង <span class="vector">b</span> = (7, 5)។ ចូររកវ៉ិចទ័រទីតាំងនៃចំណុចកណ្តាល I នៃអង្កត់ AB។ (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q1" value="A"> A. (10, 4)</label></li>
+                <li class="option-item"><label><input type="radio" name="q1" value="B"> B. (2, 3)</label></li>
+                <li class="option-item"><label><input type="radio" name="q1" value="C"> C. (5, 2)</label></li>
+                <li class="option-item"><label><input type="radio" name="q1" value="D"> D. (4, 6)</label></li>
+            </ul>
+            <div class="result-box" id="r1"></div>
+        </div>
+
+        <!-- សំណួរទី ២ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ២៖ ចំណុច C ចែកអង្កត់ AB ខាងក្នុងតាមផលធៀប m : n = 2 : 1។ បើ <span class="vector">a</span> និង <span class="vector">b</span> ជាវ៉ិចទ័រទីតាំងនៃ A និង B តើវ៉ិចទ័រទីតាំង <span class="vector">c</span> ស្មើនឹងប៉ុន្មាន? (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q2" value="A"> A. <span class="vector">c</span> = (2<span class="vector">b</span> + <span class="vector">a</span>) / 3</label></li>
+                <li class="option-item"><label><input type="radio" name="q2" value="B"> B. <span class="vector">c</span> = (<span class="vector">b</span> + 2<span class="vector">a</span>) / 3</label></li>
+                <li class="option-item"><label><input type="radio" name="q2" value="C"> C. <span class="vector">c</span> = (2<span class="vector">b</span> - <span class="vector">a</span>) / 1</label></li>
+                <li class="option-item"><label><input type="radio" name="q2" value="D"> D. <span class="vector">c</span> = (2<span class="vector">a</span> - <span class="vector">b</span>) / 3</label></li>
+            </ul>
+            <div class="result-box" id="r2"></div>
+        </div>
+
+        <!-- សំណួរទី ៣ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ៣៖ គេឲ្យចំណុច A(1, 2) និង B(4, 5)។ វ៉ិចទ័រទីតាំង <span class="vector">d</span> នៃចំណុច D ដែលចែកអង្កត់ AB ខាងក្រៅតាមផលធៀប 2 : 1 គឺ៖ (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q3" value="A"> A. (7, 8)</label></li>
+                <li class="option-item"><label><input type="radio" name="q3" value="B"> B. (5, 6)</label></li>
+                <li class="option-item"><label><input type="radio" name="q3" value="C"> C. (3, 3)</label></li>
+                <li class="option-item"><label><input type="radio" name="q3" value="D"> D. (9, 12)</label></li>
+            </ul>
+            <div class="result-box" id="r3"></div>
+        </div>
+
+        <!-- សំណួរទី ៤ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ៤៖ បើចំណុច P(5, y) ជាចំណុចកណ្តាលនៃអង្កត់តភ្ជាប់ពី A(x, 4) ទៅ B(3, 8) ចូររកតម្លៃ x និង y។ (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q4" value="A"> A. x = 2, y = 6</label></li>
+                <li class="option-item"><label><input type="radio" name="q4" value="B"> B. x = 7, y = 6</label></li>
+                <li class="option-item"><label><input type="radio" name="q4" value="C"> C. x = 7, y = 12</label></li>
+                <li class="option-item"><label><input type="radio" name="q4" value="D"> D. x = 4, y = 6</label></li>
+            </ul>
+            <div class="result-box" id="r4"></div>
+        </div>
+
+        <!-- សំណួរទី ៥ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ៥៖ បើ <span class="vector">OP</span> = <span class="vector">p</span> ជាវ៉ិចទ័រទីតាំងនៃចំណុច P ធៀបនឹងគល់ O ថេរមួយ។ តើនិយមន័យនេះត្រឹមត្រូវដែរឬទេ? (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q5" value="A"> A. ខុស ព្រោះគល់ O ត្រូវតែផ្លាស់ទី</label></li>
+                <li class="option-item"><label><input type="radio" name="q5" value="B"> B. ត្រូវ ព្រោះវ៉ិចទ័រទីតាំងត្រូវបានកំណត់ធៀបនឹងចំណុចនឹង O មួយ</label></li>
+                <li class="option-item"><label><input type="radio" name="q5" value="C"> C. ខុស ព្រោះវាជាវ៉ិចទ័រឯកតា</label></li>
+                <li class="option-item"><label><input type="radio" name="q5" value="D"> D. ត្រូវពាក់កណ្តាល ព្រោះ P ត្រូវតែជាចំណុចគល់វិញ</label></li>
+            </ul>
+            <div class="result-box" id="r5"></div>
+        </div>
+
+        <!-- សំណួរទី ៦ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ៦៖ គេឲ្យ <span class="vector">a</span> = (2, 4) និង <span class="vector">b</span> = (6, 8)។ រកកូអរដោនេនៃចំណុច C ដែលចែកអង្កត់ AB ខាងក្នុងតាមផលធៀប 1 : 1។ (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q6" value="A"> A. (4, 6)</label></li>
+                <li class="option-item"><label><input type="radio" name="q6" value="B"> B. (8, 12)</label></li>
+                <li class="option-item"><label><input type="radio" name="q6" value="C"> C. (2, 2)</label></li>
+                <li class="option-item"><label><input type="radio" name="q6" value="D"> D. (3, 5)</label></li>
+            </ul>
+            <div class="result-box" id="r6"></div>
+        </div>
+
+        <!-- សំណួរទី ៧ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ៧៖ តាមរូបមន្តចែកអង្កត់ខាងក្រៅ <span class="vector">d</span> = (m<span class="vector">b</span> - n<span class="vector">a</span>) / (m - n)។ តើលក្ខខណ្ឌចាំបាច់នៃផលធៀប m និង n គឺអ្វី? (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q7" value="A"> A. m + n = 0</label></li>
+                <li class="option-item"><label><input type="radio" name="q7" value="B"> B. m ត្រូវតែស្មើ n</label></li>
+                <li class="option-item"><label><input type="radio" name="q7" value="C"> C. m ត្រូវតែខុសពី n (m ≠ n)</label></li>
+                <li class="option-item"><label><input type="radio" name="q7" value="D"> D. m និង n ត្រូវតែជាចំនួនអវិជ្ជមាន</label></li>
+            </ul>
+            <div class="result-box" id="r7"></div>
+        </div>
+
+        <!-- សំណួរទី ៨ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ៨៖ គេឲ្យចំណុច A(2, -1, 3) និង B(5, 2, -3) ក្នុងលំហ។ រកកូអរដោនេចំណុច D ចែកខាងក្រៅ AB តាមផលធៀប 2 : 1។ (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q8" value="A"> A. (8, 5, -9)</label></li>
+                <li class="option-item"><label><input type="radio" name="q8" value="B"> B. (3, 3, -6)</label></li>
+                <li class="option-item"><label><input type="radio" name="q8" value="C"> C. (7, 4, -9)</label></li>
+                <li class="option-item"><label><input type="radio" name="q8" value="D"> D. (12, 6, -3)</label></li>
+            </ul>
+            <div class="result-box" id="r8"></div>
+        </div>
+
+        <!-- សំណួរទី ៩ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ៩៖ ក្នុងត្រីកោណ ABC បើ G ជាទីប្រជុំទម្ងន់ តើវ៉ិចទ័រទីតាំង <span class="vector">g</span> កំណត់ដោយរូបមន្តណា? (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q9" value="A"> A. <span class="vector">g</span> = (<span class="vector">a</span> + <span class="vector">b</span>) / 2</label></li>
+                <li class="option-item"><label><input type="radio" name="q9" value="B"> B. <span class="vector">g</span> = (<span class="vector">a</span> + <span class="vector">b</span> + <span class="vector">c</span>) / 2</label></li>
+                <li class="option-item"><label><input type="radio" name="q9" value="C"> C. <span class="vector">g</span> = (<span class="vector">a</span> + <span class="vector">b</span> + <span class="vector">c</span>) / 3</label></li>
+                <li class="option-item"><label><input type="radio" name="q9" value="D"> D. <span class="vector">g</span> = (<span class="vector">a</span> + 2<span class="vector">b</span> + 3<span class="vector">c</span>) / 6</label></li>
+            </ul>
+            <div class="result-box" id="r9"></div>
+        </div>
+
+        <!-- សំណួរទី ១០ -->
+        <div class="question-box">
+            <div class="question-text">សំណួរទី ១០៖ គេមានចំណុច A(1, -3) និង B(5, 9)។ ចូរគណនាវ៉ិចទ័រទីតាំង <span class="vector">c</span> នៃចំណុច C ដែលចែកអង្កត់ AB ខាងក្នុងតាមផលធៀប 1 : 2។ (៥ ពិន្ទុ)</div>
+            <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q10" value="A"> A. (3, 3)</label></li>
+                <li class="option-item"><label><input type="radio" name="q10" value="B"> B. (2, 1)</label></li>
+                <li class="option-item"><label><input type="radio" name="q10" value="C"> C. (2, 3)</label></li>
+                <li class="option-item"><label><input type="radio" name="q10" value="D"> D. (7/3, 1)</label></li>
+            </ul>
+            <div class="result-box" id="r10"></div>
+        </div>
+
+        <button type="button" class="btn-submit" onclick="evaluateQuiz()">បញ្ជូនវិញ្ញាសា (Submit)</button>
+    </form>
+</div>
+
+<script>
+    function evaluateQuiz() {
+        const sName = document.getElementById('studentName').value.trim();
+        const sClass = document.getElementById('studentClass').value.trim();
+
+        if (sName === "" || sClass === "") {
+            alert("❌ សូមបំពេញឈ្មោះ និងថ្នាក់រៀនរបស់សិស្ស មុននឹងបញ្ជូនវិញ្ញាសា!");
+            return;
+        }
+
+        const correctAnswers = { 
+            q1: "C", q2: "A", q3: "A", q4: "B", q5: "B",
+            q6: "A", q7: "C", q8: "A", q9: "C", q10: "D" 
+        };
+
+        const explanations = {
+            q1: "រូបមន្តចំណុចកណ្តាល៖ I = ((3+7)/2, (-1+5)/2) = (10/2, 4/2) = (5, 2)។ ដូចនេះចម្លើយគឺ C។",
+            q2: "តាមរូបមន្តចែកខាងក្នុង៖ c = (mb + na)/(m + n)។ ជំនួស m=2, n=1 គេបាន c = (2b + a)/3។ ដូចនេះចម្លើយគឺ A។",
+            q3: "តាមរូបមន្តចែកខាងក្រៅ៖ d = (mb - na)/(m - n) ដែល m=2, n=1។ x = (2*4 - 1*1)/1 = 7 និង y = (2*5 - 1*2)/1 = 8។ ដូចនេះ D(7, 8) ចម្លើយគឺ A។",
+            q4: "P ជាចំណុចកណ្តាល នាំឲ្យ (x + 3)/2 = 5 => x = 7។ ចំពោះ y = (4 + 8)/2 = 6។ ដូចនេះ x = 7, y = 6 ចម្លើយគឺ B។",
+            q5: "ផ្អែកតាមនិយមន័យក្នុងមេរៀន វ៉ិចទ័រទីតាំងកំណត់ធៀបនឹងចំណុចនឹង (ចំណុចគល់) O មួយថេរ។ ដូចនេះចម្លើយគឺ B។",
+            q6: "ផលធៀប 1 : 1 គឺចំណុចកណ្តាល៖ C = ((2+6)/2, (4+8)/2) = (4, 6)។ ដូចនេះចម្លើយគឺ A។",
+            q7: "ក្នុងរូបមន្តចែកខាងក្រៅ ភាគបែងគឺ (m - n)។ ប្រភាគមានន័យកាលណាភាគបែងខុសពីសូន្យ គឺ m - n ≠ 0 នាំឲ្យ m ≠ n។ ដូចនេះចម្លើយគឺ C។",
+            q8: "តាមរូបមន្តចែកខាងក្រៅក្នុងលំហ (m=2, n=1)៖ x = (2*5 - 1*2)/1 = 8, y = (2*2 - 1*(-1))/1 = 5, z = (2*(-3) - 1*3)/1 = -9។ ដូចនេះ D(8, 5, -9) ចម្លើយគឺ A។",
+            q9: "ទីប្រជុំទម្ងន់នៃត្រីកោណ ABC គណនាដោយមធ្យមភាគនៃវ៉ិចទ័រទីតាំងទាំងបី៖ g = (a + b + c)/3។ ដូចនេះចម្លើយគឺ C។",
+            q10: "តាមរូបមន្តចែកខាងក្នុង (m=1, n=2)៖ x = (1*5 + 2*1)/(1+2) = 7/3 និង y = (1*9 + 2*(-3))/(1+2) = 3/3 = 1។ នាំឲ្យកូអរដោនេ C(7/3, 1)។ ដូចនេះចម្លើយគឺ D។"
+        };
+
+        let totalQuestions = Object.keys(correctAnswers).length;
+        let score = 0;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+            const qName = 'q' + i;
+            const rBox = document.getElementById('r' + i);
+            const userSelection = document.querySelector(`input[name="${qName}"]:checked`);
+
+            rBox.style.display = "block";
+
+            if (!userSelection) {
+                rBox.className = "result-box incorrect-answer";
+                rBox.innerHTML = "❌ <b>មិនបានឆ្លើយ៖</b> សូមជ្រើសរើសចម្លើយមួយ!<br><div class='explanation'><b>ការពន្យល់៖</b> " + explanations[qName] + "</div>";
+            } else if (userSelection.value === correctAnswers[qName]) {
+                score += 5;
+                rBox.className = "result-box correct-answer";
+                rBox.innerHTML = "🎯 <b>ត្រឹមត្រូវ! (+៥ ពិន្ទុ)</b><br><div class='explanation'><b>ពន្យល់លម្អិត៖</b> " + explanations[qName] + "</div>";
+            } else {
+                rBox.className = "result-box incorrect-answer";
+                rBox.innerHTML = "❌ <b>ខុសហើយ!</b> អ្នកជ្រើសរើសចម្លើយ " + userSelection.value + " (ចម្លើយត្រឹមត្រូវគឺ " + correctAnswers[qName] + ")<br><div class='explanation'><b>ពន្យល់លម្អិត៖</b> " + explanations[qName] + "</div>";
+            }
+        }
+
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        scoreDisplay.style.display = "block";
+        scoreDisplay.innerHTML = "📊 <b>លទ្ធផលប្រឡង៖</b><br>" + 
+                                  "👤 ឈ្មោះសិស្ស៖ <b>" + sName + "</b><br>" + 
+                                  "🏫 ថ្នាក់រៀន៖ <b>" + sClass + "</b><br>" + 
+                                  "💯 ពិន្ទុទទួលបាន៖ <span style='color: #e74c3c; font-size: 1.5rem;'>" + score + "</span> / ៥០ ពិន្ទុ។";
+        
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+</script>
+
+</body>
+</html>
